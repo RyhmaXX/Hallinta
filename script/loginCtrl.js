@@ -14,7 +14,7 @@ app.controller("loginCtrl", function ($scope, $window, $http){
 	};
 	
 	$http.post("php/login.php", data).then(function(response){
-		if (response.code == 0){
+		if (response.data.code == 0){
 			$window.location.href = "#/home";
 		}
 		else{
