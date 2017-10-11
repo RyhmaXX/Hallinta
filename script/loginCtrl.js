@@ -5,22 +5,20 @@ app.controller("loginCtrl", function ($scope, $window, $http){
 	$scope.virhe = true;
 	
 	$scope.kirjaudu = function() {
-	
 
-	
-	var data = {
-		'kt' : $scope.ktunnus,
-		'salasana' : $scope.salasana
-	};
-	
-	$http.post("php/login.php", data).then(function(response){
-		if (response.data.code == 0){
-			$window.location.href = "#/home";
-		}
-		else{
-			$scope.error = "Virheellinen kirjautuminen";
-			$scope.virhe = false;
-		}			
+		var data = {
+			'kt' : $scope.ktunnus,
+			'salasana' : $scope.salasana
+		};
+
+		$http.post("php/login.php", data).then(function(response){
+			if (response.data.code == 0){
+				$window.location.href = "#/home";
+			}
+			else{
+				$scope.error = "Virheellinen kirjautuminen";
+				$scope.virhe = false;
+			}			
 	});
 	
 	};
