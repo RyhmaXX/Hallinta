@@ -1,6 +1,6 @@
 <?php
-	
 	// Placeholder
+	session_start();
 	
 	$resp = [];
 	
