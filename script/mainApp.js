@@ -13,7 +13,8 @@ app.config(function($routeProvider) {
         templateUrl : "results.html"
     })
 	.when("/home", {
-        templateUrl : "home.html"
+        templateUrl : "home.html",
+	    controller : "homeCtrl"
     })
     .when("/settings", {
         templateUrl : "settings.html"
