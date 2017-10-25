@@ -14,7 +14,7 @@
 			
 			$query = $conn->prepare("SELECT id, name
 									FROM poll
-									WHERE status = 4 && domain = ?");
+									WHERE status = 10 && domain = ?");
 									
 			$query->bind_param("i", $domain);
 			$query->execute();
