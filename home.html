@@ -11,6 +11,25 @@
 <div class="container">
 	<div class="well">
 		<p>Etusivu</p>
-		<p>Kyselyt: {{ polls }}</p>
+		<table class="table table-bordered">
+		
+		<thead>
+				<tr>
+					<th>Nimi:</th>
+					<th>Alkaa:</th>
+					<th>Päättyy:</th>
+					<th>Tila:</th>
+				</tr>
+		</thead>
+		<tbody>
+		<tr ng-repeat="x in polls">		
+					<td>{{x.name}}</td>
+					<td>{{x.start}}</td>
+					<td>{{x.end}}</td>
+					<td>{{x.status}}</td>
+				</tr>
+		</tbody>
+		</table>
+		
 	</div>
 </div>

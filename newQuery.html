@@ -10,7 +10,24 @@
 <br>
 
 <div class="container">
-	<div class="well">
-		<p>Uusi kysely -sivu</p>
+	<div class="well">	
+		<div class="form-group">
+			<label for="usr">Kyselyn nimi:</label>
+			<input type="text" class="form-control" ng-model="name" ng-blur="check()">
+		</div>
+		<label>Ei päivämäärää:
+			<input type="checkbox" ng-model="skipdate" ng-blur="check()">
+		</label><br/>
+		<div class="form-group">
+			<label>Alkamispvm:</label>
+			<input type="date" class="form-control" ng-model="startdate" ng-blur="check()">
+		</div>
+		
+		<div class="form-group">
+			<label>Loppumispvm:</label>
+			<input type="date" class="form-control" ng-model="enddate" ng-blur="check()">
+		</div>
+		
+		<button class="btn btn-lg btn-block {{ok ? 'btn-success' : 'btn-disabled'}}" ng-disabled="!ok" ng-click="saveEventInfo()">Seuraava</button>
 	</div>
 </div>
