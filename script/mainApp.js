@@ -7,7 +7,8 @@ app.config(function($routeProvider) {
 		controller : "loginCtrl"
     })
     .when("/new", {
-        templateUrl : "newQuery.html"
+        templateUrl : "newQuery.html",
+		controller : "newQueryCtrl"
     })
     .when("/results", {
         templateUrl : "results.html"
