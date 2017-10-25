@@ -1,4 +1,4 @@
-app.controller("newQueryCtrl", function ($scope, $window, $http){
+app.controller("newQueryCtrl", function ($scope, $window, $http, $location){
 	
 	$scope.name = "";
 	$scope.startdate = new Date();
@@ -7,24 +7,30 @@ app.controller("newQueryCtrl", function ($scope, $window, $http){
 	
 	$scope.saveEventInfo = function() {
 		if ($scope.skipdate == false){
-		var data = {
-			'name' : $scope.name,
-			'startdate' : Math.floor($scope.startdate.getTime() / 1000),
-			'enddate' : Math.floor($scope.enddatedate.getTime() / 1000),
-			'status' : 1
-		};
+			var data = {
+				'name' : $scope.name,
+				'startdate' : Math.floor($scope.startdate.getTime() / 1000),
+				'enddate' : Math.floor($scope.enddate.getTime() / 1000),
+				'status' : 1
+			};
 		}
 		else {
 			var data = {
-			'name' : $scope.name,
-			'startdate' : null,
-			'enddate' : null,
-			'status' : 1
-		};
+				'name' : $scope.name,
+				'startdate' : null,
+				'enddate' : null,
+				'status' : 1
+			};
 		}
-		//$http.post("php/setPoll.php", data);
 		
-		$location.path('/home');
+		$http.post("php/setPoll.php", data).then(function(response){
+			if (response.data.code == 0) {
+				$location.path("/home");
+			} else {
+				alert("error: " + response.data.code);
+			}
+		});
+		
 	};
 	
 	$scope.check = function() {
