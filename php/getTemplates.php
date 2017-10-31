@@ -19,7 +19,7 @@
 			$query->bind_param("i", $domain);
 			$query->execute();
 			
-			$result = $query_>get_result();
+			$result = $query->get_result();
 			
 			$templates = [];
 			
