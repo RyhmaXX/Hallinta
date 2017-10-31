@@ -5,9 +5,8 @@ app.controller("newQueryCtrl", function ($scope, $window, $http, $location){
 	$scope.enddate = new Date();
 	$scope.skipdate = false;
 	$scope.skiptemplate = false;
-	$scope.selectedtemplate = "";
-	$scope.selectedUsers = "";
-	$scope.selectedLake = "";
+	$scope.selectedtemplate = 0;
+	$scope.selectedLake = 0;
 	
 	
 	$http.get("php/getLakes.php").then(function(response){
@@ -48,51 +47,121 @@ app.controller("newQueryCtrl", function ($scope, $window, $http, $location){
 		};
 	*/
 	
+	// Save poll to database
 	$scope.saveEventInfo = function() {
 		if ($scope.skipdate == false){
-			if ($scope.selectedtemplate != "---Ei pohjaa---" && $scope.selectedtemplate != ""){
-				var data = {
-					'name' : $scope.name,
-					'startdate' : Math.floor($scope.startdate.getTime() / 1000),
-					'enddate' : Math.floor($scope.enddate.getTime() / 1000),
-					'status' : 1,
-					'selectedtemplate' : $scope.selectedtemplate
-				};
-			}
+			var data = {
+				'name' : $scope.name,
+				'startdate' : Math.floor($scope.startdate.getTime() / 1000),
+				'enddate' : Math.floor($scope.enddate.getTime() / 1000),
+				'status' : 1,
+			};
 		}
 		else {
-			if ($scope.selectedtemplate == "---Ei pohjaa---"){
-				var data = {
-					'name' : $scope.name,
-					'startdate' : null,
-					'enddate' : null,
-					'status' : 1
-					
-				};
-			}
+
+			var data = {
+				'name' : $scope.name,
+				'startdate' : null,
+				'enddate' : null,
+				'status' : 1
+			};
+
 		}
 		
+		// Save basic info
 		$http.post("php/setPoll.php", data).then(function(response){
 			if (response.data.code == 0) {
-				$location.path("/home");
+				
+				var id = response.data.id;
+				
+				// Link users if needed
+				if ($scope.selectedLake != 0) {
+					var data = {
+						'id' : $scope.selectedLake
+					};
+					
+					$http.post("php/getAreasByLake.php", data).then(function(response){
+						if (response.data.code == 0) {
+							$scope.areas = response.data.areas;
+							
+							var len = $scope.areas.length;
+							
+							// $scope.areas alueet tyylillä: [1, 2]
+							// $scope.users käyttäjät alueittain
+							var usersToLink = [];
+							
+							for (var i = 0; i < len; i++) {
+								try {
+									for (var j = 0; j < $scope.users[$scope.areas[i]].length; j++) {
+										
+										if (usersToLink.indexOf($scope.users[$scope.areas[i]][j]) == -1) {
+											usersToLink.push($scope.users[$scope.areas[i]][j]);
+										}
+									}
+								} catch(err) {
+									
+								}
+							}
+							
+							alert(id);
+							
+							var data = {
+								'users' : usersToLink,
+								'poll' : id
+							};
+							
+							$http.post("php/linkUsersToPoll.php", data).then(function(response) {
+								if (response.data.code != 0) {
+									alert("Virhe vastaajien liittämisessä! " + response.data.code);
+								}
+							});
+							
+						} else {
+							alert("error: " + response.data.code);
+						}
+					});
+				}
+				
+				// Apply template if needed
+				if ($scope.selectedtemplate != 0) {
+					var data = {
+						'pollid' : $scope.selectedtemplate
+					};
+					
+					$http.post("php/getTemplate.php", data).then(function(response){
+						if (response.data.code == 0) {
+							
+							var questions = [];
+							
+							var len = response.data.questions.length;
+							
+							for (var i = 0;  i < len; i++) {
+								questions.push([response.data.questions[i].num, response.data.questions[i].question, response.data.questions[i].type]);
+							}
+							
+							var data = {
+								'poll' : id,
+								'questions' : questions
+							}
+							
+							$http.post("php/setQuestions.php", data).then(function(response) {
+								if (response.data.code != 0) {
+									alert("Virhe templaten käyttöönotossa!");
+								}
+							});
+							
+						} else {
+							alert("error: " + response.data.code);
+						}
+					});
+				}
 			} else {
 				alert("error: " + response.data.code);
 			}
 		});
 		
-		var data = {
-			'id' : $scope.selectedLake
-		};
-		
-		$http.post("php/getAreasByLake.php", data).then(function(response){
-			if (response.data.code == 0) {
-				$scope.areas = response.data.areas;
-				/* ribs aivot */
-			} else {
-				alert("error: " + response.data.code);
-			}
-		});
-		
+		$location.path("/home");
+
 	};
 	
 	$scope.check = function() {

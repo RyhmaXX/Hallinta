@@ -33,7 +33,7 @@
 			<label>Valmiit pohjat</label>
 			<div class="form-group">
 				<select ng-model="selectedtemplate">
-					<option>---Ei pohjaa---</option>
+					<option value="0">Älä käytä pohjaa</option>
 					<option ng-repeat="x in templates" value="{{x.id}}">{{x.name}}</option>
 				</select>
 			</div>
@@ -43,7 +43,7 @@
 			<label>Järven mukaan</label>
 			<div class="form-group">
 				<select ng-model="selectedLake">
-					<option>---Ei järveä---</option>
+					<option value="0">Älä lisää vastaajia</option>
 					<option ng-repeat="x in lakes" value="{{x.id}}">{{x.name}}</option>
 				</select>
 			</div>
@@ -55,4 +55,6 @@
 		
 		<button class="btn btn-lg btn-block {{ok ? 'btn-success' : 'btn-disabled'}}" ng-disabled="!ok" ng-click="saveEventInfo()">Seuraava</button>
 	</div>
+	<p>{{selectedtemplate}}</p>
+	<p>{{selectedLake}}</p>
 </div>
