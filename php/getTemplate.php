@@ -17,7 +17,7 @@
 			$domain = $_SESSION["user"]["domain"];
 			
 			$query = $conn->prepare("SELECT question_num, question, question_types_id
-									FROM poll
+									FROM question
 									WHERE poll_id = ?");
 									
 			$query->bind_param("i", $pollid);
@@ -43,10 +43,10 @@
 			}
 			
 			$resp["code"] = 0;
-			$resp["questions"] = $arr;
+			$resp["questions"] = $questions;
 			
 		} else {
-			// Not logget in
+			// Not loggedquestion in
 			$resp["code"] = 1;
 		}
 	} catch (Exception $e){

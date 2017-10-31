@@ -1,5 +1,5 @@
 <?php
-	
+
 	session_start();
 	
 	try {
@@ -10,21 +10,15 @@
 		
 		if (isset($_SESSION["user"])) {
 			
-			$postdata = file_get_contents("php://input");
-			$request = json_decode($postdata);
-
-			$lake = $request->id;
 			$domain = $_SESSION["user"]["domain"];
 			
-			$query = $conn->prepare("SELECT id
+			$query = $conn->prepare("SELECT id, name 
 									FROM area 
-									WHERE lake_id = ? AND lake_id IN (
+									WHERE lake_id IN (
 										SELECT id 
 										FROM lake 
-										WHERE domain_id = ?
-									)");
-									
-			$query->bind_param("ii", $lake, $domain);
+										WHERE domain_id = ?)");
+			$query->bind_param("i", $domain);
 			$query->execute();
 			
 			$result = $query->get_result();
@@ -32,14 +26,19 @@
 			$arr = [];
 			
 			while ($row = $result->fetch_assoc()) {
-				$area = $row["id"];
-	
-				array_push($arr, $area);
+				$id = $row["id"];
+				$name = $row["name"];
+
+				$a = array (
+					"id" => $id,
+					"name" => $name,
+				);
 				
+				array_push($arr, $a);
 			}
 			
 			$resp["code"] = 0;
-			$resp["areas"] = $arr;
+			$resp["lakes"] = $arr;
 			
 		} else {
 			
@@ -55,5 +54,4 @@
 	}
 	
 	echo json_encode($resp);
-	
 ?>

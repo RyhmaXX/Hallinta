@@ -26,6 +26,8 @@
 			if ($query->execute()) {
 				// Success
 				$resp["code"] = 0;
+				$resp["id"] = $conn->insert_id;
+				
 			} else {
 				// Error
 				$resp["code"] = -1;

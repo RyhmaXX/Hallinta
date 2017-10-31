@@ -21,8 +21,8 @@
 			
 			$num = 1;
 			
-			foreach ($question in $questions) {
-				$query->bind_param("iiii", $num, $poll, $question[0], $question[1])
+			foreach ($questions as $question) {
+				$query->bind_param("iisi", $question[0], $poll, $question[1], $question[2]);
 				if ($query->execute()) {
 					// Success
 					$resp["code"] = 0;
