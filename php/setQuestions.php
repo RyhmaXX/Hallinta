@@ -8,7 +8,7 @@
 		
 		$resp = [];
 		
-		if (isset($_SESSION["user"])) {
+		if (isset($_SESSION["user"]["domain"])) {
 			
 			$postdata = file_get_contents("php://input");
 			$request = json_decode($postdata);
