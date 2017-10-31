@@ -1,0 +1,33 @@
+<?php
+	session_start();
+	
+	try {
+		
+		include("db.inc");
+		
+		$resp = [];
+		
+		if (isset($_SESSION["user"])) {
+			
+			$postdata = file_get_contents("php://input");
+			$request = json_decode($postdata);
+			
+			$areas = $request->areas;
+			$poll = $request->poll;
+			$domain = $_SESSION["user"]["domain"];
+			
+			foreach ($areas as $area) {
+			
+				// TO DO SQL queries
+			}
+		} else {
+			// Not logget in
+			$resp["code"] = 1;
+		}
+	} catch (Exception $e){
+		$resp = [];
+		$resp["code"] = -1;
+	}
+	
+	echo json_encode($resp);
+?>
