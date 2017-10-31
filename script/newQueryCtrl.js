@@ -9,6 +9,7 @@ app.controller("newQueryCtrl", function ($scope, $window, $http, $location){
 	$scope.selectedUsers = "";
 	$scope.selectedLake = "";
 	
+	
 	$http.get("php/getLakes.php").then(function(response){
 		if (response.data.code == 0) {
 			$scope.lakes = response.data.lakes;
@@ -74,6 +75,19 @@ app.controller("newQueryCtrl", function ($scope, $window, $http, $location){
 		$http.post("php/setPoll.php", data).then(function(response){
 			if (response.data.code == 0) {
 				$location.path("/home");
+			} else {
+				alert("error: " + response.data.code);
+			}
+		});
+		
+		var data = {
+			'id' : $scope.selectedLake
+		};
+		
+		$http.post("php/getAreasByLake.php", data).then(function(response){
+			if (response.data.code == 0) {
+				$scope.areas = response.data.areas;
+				/* ribs aivot */
 			} else {
 				alert("error: " + response.data.code);
 			}
