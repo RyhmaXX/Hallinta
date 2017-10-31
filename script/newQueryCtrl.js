@@ -6,6 +6,28 @@ app.controller("newQueryCtrl", function ($scope, $window, $http, $location){
 	$scope.skipdate = false;
 	$scope.skiptemplate = false;
 	$scope.selectedtemplate = "";
+	$scope.selectedUsers = "";
+	$scope.selectedLake = "";
+	
+	$http.get("php/getLakes.php").then(function(response){
+		if (response.data.code == 0) {
+			$scope.lakes = response.data.lakes;
+		} else if (response.data.code == 1) {
+			$location.path("/new");
+		} else {
+			alert("error: " + response.data.code);
+		}
+	});
+	
+	$http.get("php/getUsersByAreas.php").then(function(response){
+		if (response.data.code == 0) {
+			$scope.users = response.data.users;
+		} else if (response.data.code == 1) {
+			$location.path("/new");
+		} else {
+			alert("error: " + response.data.code);
+		}
+	});
 	
 	$http.get("php/getTemplates.php").then(function(response){
 		if (response.data.code == 0) {
@@ -17,17 +39,17 @@ app.controller("newQueryCtrl", function ($scope, $window, $http, $location){
 		}
 	});
 	
-	/* Testi funktio jolla voi tarkastaa lähetettävä template
+	/* Testi funktio
 	$scope.testi = function() {
-		if ($scope.selectedtemplate != "Ei pohjaa" && $scope.selectedtemplate != ""){
-				alert($scope.selectedtemplate);
-				}
+
+				alert($scope.selectedLake);
+				
 		};
-	*/	
+	*/
 	
 	$scope.saveEventInfo = function() {
 		if ($scope.skipdate == false){
-			if ($scope.selectedtemplate != "Ei pohjaa" && $scope.selectedtemplate != ""){
+			if ($scope.selectedtemplate != "---Ei pohjaa---" && $scope.selectedtemplate != ""){
 				var data = {
 					'name' : $scope.name,
 					'startdate' : Math.floor($scope.startdate.getTime() / 1000),
@@ -38,7 +60,7 @@ app.controller("newQueryCtrl", function ($scope, $window, $http, $location){
 			}
 		}
 		else {
-			if ($scope.selectedtemplate == "Ei pohjaa"){
+			if ($scope.selectedtemplate == "---Ei pohjaa---"){
 				var data = {
 					'name' : $scope.name,
 					'startdate' : null,

@@ -33,13 +33,23 @@
 			<label>Valmiit pohjat</label>
 			<div class="form-group">
 				<select ng-model="selectedtemplate">
-					<option>Ei pohjaa</option>
+					<option>---Ei pohjaa---</option>
 					<option ng-repeat="x in templates" value="{{x.id}}">{{x.name}}</option>
 				</select>
 			</div>
 		</div>
+		<label>Vastaajat:</label>
+		<div class="well">
+			<label>Järven mukaan</label>
+			<div class="form-group">
+				<select ng-model="selectedLake">
+					<option>---Ei järveä---</option>
+					<option ng-repeat="x in lakes" value="{{x.id}}">{{x.name}}</option>
+				</select>
+			</div>
+		</div>
 		<br><br>
-		<!-- Testi nappi jolla voi tarkastaa lähetettävä template
+		<!-- Testi button
 		<button class="btn btn-lg btn-block"ng-click="testi()">testi</button> -->
 		
 		
