@@ -12,9 +12,10 @@
 			
 			$domain = $_SESSION["user"]["domain"];
 			
-			$query = $conn->prepare("SELECT id, fname, lname, zip 
+			$query = $conn->prepare("SELECT id, fname, lname, zip_zip 
 									FROM user 
 									WHERE domain = ?");
+			
 			$query->bind_param("i", $domain);
 			$query->execute();
 			
@@ -27,7 +28,7 @@
 				$id = $row["id"];
 				$fname = $row["fname"];
 				$lname = $row["lname"];
-				$zip = $row["zip"];
+				$zip = $row["zip_zip"];
 
 				$a = array (
 					"id" => $id,
