@@ -6,6 +6,7 @@
 		include("db.inc");
 		
 		$resp = [];
+		$resp["code"] = 0;
 		
 		if (isset($_SESSION["user"])) {
 			
@@ -16,10 +17,20 @@
 			$poll = $request->poll;
 			$domain = $_SESSION["user"]["domain"];
 			
+			// TO DO Optimize!
+			
+			$query = $conn->prepare("INSERT INTO user_to_poll (user_id, poll_id) VALUES (?, ?)");
+			
 			foreach ($users as $user) {
 			
-				// TO DO SQL queries
+				$query->bind_param("ii", $user, $poll);
+				
+				if (!($query->execute())) {
+					// error
+					$resp["code"] = 2;
+				}
 			}
+			
 		} else {
 			// Not logget in
 			$resp["code"] = 1;
