@@ -8,7 +8,7 @@
 								FROM choice
 								WHERE question_poll_id = ? AND question_question_num = ?");
 		
-		$query->bind_param("ii", $pollid, $num)
+		$query->bind_param("ii", $pollid, $num);
 		$query->execute();
 		
 		$result = $query->get_result();
@@ -32,12 +32,12 @@
 	
 	function getMatrixRows($conn, $id) {
 		
-		$query = $conn-prepare("SELECT num, title
+		$query = $conn->prepare("SELECT num, title
 								FROM qm_row
 								WHERE qm_id = ?
 								ORDER BY num");
 		
-		$query->bind_param("i", $id)
+		$query->bind_param("i", $id);
 		$query->execute();
 		
 		$result = $query->get_result();
@@ -61,12 +61,12 @@
 	
 	function getMatrixColumns($conn, $id) {
 		
-		$query = $conn-prepare("SELECT num, title, type
+		$query = $conn->prepare("SELECT num, title, type
 								FROM qm_column
 								WHERE qm_id = ?
 								ORDER BY num");
 		
-		$query->bind_param("i", $id)
+		$query->bind_param("i", $id);
 		$query->execute();
 		
 		$result = $query->get_result();
@@ -96,7 +96,7 @@
 								FROM question_matrix
 								WHERE poll_id = ? AND question_num = ?");
 		
-		$query->bind_param("ii", $pollid, $num)
+		$query->bind_param("ii", $pollid, $num);
 		$query->execute();
 		
 		$result = $query->get_result();
@@ -106,8 +106,8 @@
 		$id = $row["id"];
 		$header = $row["header"];
 		
-		$rows = getMatrixRows();
-		$columns = getMatrixColumns();
+		$rows = getMatrixRows($conn, $id);
+		$columns = getMatrixColumns($conn, $id);
 		
 		$matrix = array(
 			"header" => $header,
@@ -176,7 +176,8 @@
 					$question = array(
 						"num" => $num,
 						"question" => $question,
-						"type" => $type
+						"type" => $type,
+						"extra" => null
 					);
 				}
 				

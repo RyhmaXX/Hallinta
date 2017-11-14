@@ -3,7 +3,7 @@
 	session_start();
 	
 	function setChoices($conn, $poll, $choices, $qnum) {
-		
+
 		$errors = 0;
 		
 		$query = $conn->prepare("INSERT INTO choice (num, name, question_poll_id, question_question_num)
@@ -11,7 +11,7 @@
 		
 		foreach ($choices as $choise) {
 			
-			$query->bind_param("isii", $choise["num"], $choise["name"], $poll, $qnum);
+			$query->bind_param("isii", $choise->num, $choise->name, $poll, $qnum);
 			
 			if ($query->execute()) {
 				// ok
@@ -24,7 +24,7 @@
 	}
 	
 	function setRows($conn, $mid, $rows) {
-		
+
 		$errors = 0;
 		
 		$query = $conn->prepare("INSERT INTO qm_row (qm_id, num, title)
@@ -32,7 +32,7 @@
 		
 		foreach ($rows as $row) {
 			
-			$query->bind_param("iis", $mid, $row["num"], $row["title"]);
+			$query->bind_param("iis", $mid, $row->num, $row->title);
 			
 			if ($query->execute()) {
 				// ok
@@ -45,7 +45,7 @@
 	}
 	
 	function setColumns($conn, $mid, $cols) {
-				
+
 		$errors = 0;
 		
 		$query = $conn->prepare("INSERT INTO qm_column (qm_id, num, title, type)
@@ -53,7 +53,7 @@
 		
 		foreach ($cols as $col) {
 			
-			$query->bind_param("iisi", $mid, $col["num"], $col["title"], $col["type"]);
+			$query->bind_param("iisi", $mid, $col->num, $col->title, $col->type);
 			
 			if ($query->execute()) {
 				// ok
@@ -72,13 +72,13 @@
 		$query = $conn->prepare("INSERT INTO question_matrix (poll_id, question_num, header)
 								VALUES (?, ?, ?)");
 								
-		$query->bind_param("iis", $poll, $qnum, $matrix["header"]);
+		$query->bind_param("iis", $poll, $qnum, $matrix->header);
 		
 		if ($query->execute()) {
 			$mid = $conn->insert_id;
 			
-			$errors += setRows($conn, $mid, $matrix["rows"]);
-			$errors += setColumns($conn, $mid, $matrix["columns"]);
+			$errors += setRows($conn, $mid, $matrix->rows);
+			$errors += setColumns($conn, $mid, $matrix->columns);
 			
 		} else {
 			$errors++;
@@ -111,12 +111,14 @@
 				if ($query->execute()) {
 					// Success
 					
-					if ($type > 99 && $type < 200) {
+					if ($question[2] > 99 && $question[2] < 200) {
+						
 						$errors += setChoices($conn, $poll, $question[3], $question[0]);
 						
 						$query = $conn->prepare("INSERT INTO question (question_num, poll_id, question, question_types_id)
 									VALUES (?, ?, ?, ?)");
-					} else if ($type > 199) {
+					} else if ($question[2] > 199) {
+						
 						$errors += setMatrix($conn, $poll, $question[3], $question[0]);
 						
 						$query = $conn->prepare("INSERT INTO question (question_num, poll_id, question, question_types_id)
