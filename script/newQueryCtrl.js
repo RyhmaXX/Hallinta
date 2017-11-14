@@ -3,7 +3,7 @@ app.controller("newQueryCtrl", function ($scope, $window, $http, $location){
 	$scope.name = "";
 	$scope.startdate = new Date();
 	$scope.enddate = new Date();
-	$scope.skipdate = false;
+	$scope.adddate = false;
 	$scope.skiptemplate = false;
 	$scope.selectedtemplate = 0;
 	$scope.selectedLake = 0;
@@ -165,14 +165,14 @@ app.controller("newQueryCtrl", function ($scope, $window, $http, $location){
 	};
 	
 	$scope.check = function() {
-		if ($scope.skipdate == false){
+		if ($scope.adddate == true){
 			if ($scope.name != "" && $scope.enddate > $scope.startdate) {
 				$scope.ok = true;
 			} else {
 				$scope.ok = false;
 			}
 		}
-		else if($scope.skipdate == true && $scope.name != ""){
+		else if($scope.adddate == false && $scope.name != ""){
 		  $scope.ok = true;
 		  
 	  }
