@@ -16,7 +16,7 @@
 
 <div class="container">
 	<div class="well">
-		<p>Etusivu</p>
+		<h4>Kyselyt:</h4>
 		<div class="table-responsive">
 		<table class="table table-bordered">
 		
@@ -26,6 +26,7 @@
 					<th>Alkaa:</th>
 					<th>Päättyy:</th>
 					<th>Tila:</th>
+					<th>Toiminnot:</th>
 				</tr>
 		</thead>
 		<tbody>
@@ -34,7 +35,11 @@
 					<td>{{x.start != null ? x.start : "-"}}</td>
 					<td>{{x.end != null ? x.end : "-"}}</td>
 					<td>{{x.status}}</td>
-					<td><button type="button" title="Julkaise" class="btn btn-info btn-sm" ng-click="saveId(x.id)" data-toggle="modal" data-target="#myModal"><i class="glyphicon glyphicon-export"></i></button></td>
+					<td>
+						<button type="button" title="Muokkaa" class="btn btn-info btn-sm" ng-hide="x.status != 'Luotu'"><i class="glyphicon glyphicon-wrench"></i></button>
+						<button type="button" title="Julkaise" class="btn btn-info btn-sm" ng-click="saveId(x.id)" data-toggle="modal" data-target="#myModal" ng-hide="x.status != 'Luotu'"><i class="glyphicon glyphicon-export"></i></button>
+						<button type="button" title="Poista" class="btn btn-danger btn-sm"><i class="glyphicon glyphicon-remove-circle"></i></button>
+					</td>
 				</tr>
 		</tbody>
 		</table>
