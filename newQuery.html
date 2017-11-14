@@ -16,14 +16,14 @@
 			<input type="text" class="form-control" ng-model="name" ng-blur="check()">
 		</div>
 		<label>Päivämäärät:
-			<input type="checkbox" ng-model="skipdate" ng-blur="check()">
+			<input type="checkbox" ng-model="adddate" ng-blur="check()">
 		</label><br/>
-		<div class="form-group" ng-show="skipdate">
+		<div class="form-group" ng-show="adddate">
 			<label>Alkamispvm:</label>
 			<input type="date" class="form-control" ng-model="startdate" ng-blur="check()">
 		</div>
 		
-		<div class="form-group" ng-show="skipdate">
+		<div class="form-group" ng-show="adddate">
 			<label>Loppumispvm:</label>
 			<input type="date" class="form-control" ng-model="enddate" ng-blur="check()">
 		</div>
@@ -32,7 +32,7 @@
 		<div class="well">
 			<label>Valmiit pohjat</label>
 			<div class="form-group">
-				<select class="form-control" ng-model="selectedtemplate">
+				<select class="form-control" ng-model="selectedtemplate" ng-blur="check()">
 					<option value="0">Älä käytä pohjaa</option>
 					<option ng-repeat="x in templates" value="{{x.id}}">{{x.name}}</option>
 				</select>
@@ -42,7 +42,7 @@
 		<div class="well">
 			<label>Järven mukaan</label>
 			<div class="form-group">
-				<select class="form-control" ng-model="selectedLake">
+				<select class="form-control" ng-model="selectedLake" ng-blur="check()">
 					<option value="0">Älä lisää vastaajia</option>
 					<option ng-repeat="x in lakes" value="{{x.id}}">{{x.name}}</option>
 				</select>
