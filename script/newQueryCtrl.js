@@ -136,7 +136,7 @@ app.controller("newQueryCtrl", function ($scope, $window, $http, $location){
 							var len = response.data.questions.length;
 							
 							for (var i = 0;  i < len; i++) {
-								questions.push([response.data.questions[i].num, response.data.questions[i].question, response.data.questions[i].type]);
+								questions.push([response.data.questions[i].num, response.data.questions[i].question, response.data.questions[i].type, response.data.questions[i].extra]);
 							}
 							
 							var data = {
