@@ -20,9 +20,11 @@
 			$domain = $_SESSION["user"]["domain"];
 			
 			$query = $conn->prepare("INSERT INTO poll (name, domain, startdate, enddate, status)
-									VALUES (?, ?, FROM_UNIXTIME(?), FROM_UNIXTIME(?), ?)");
+									VALUES (?, ?, FROM_UNIXTIME(?), FROM_UNIXTIME(?), ?)
+									ON DUPLICATE KEY UPDATE
+									name = ?, startdate = ?, enddate = ?, status = ?");
 									
-			$query->bind_param("siiii", $name, $domain, $start, $end, $status);
+			$query->bind_param("siiiisiii", $name, $domain, $start, $end, $status, $name, $start, $end, $status);
 			if ($query->execute()) {
 				// Success
 				$resp["code"] = 0;
