@@ -3,7 +3,8 @@ app.controller("homeCtrl", function ($scope, $window, $http, $location){
 	$scope.id = 0;
 	$scope.startdate = null;
 	$scope.enddate = null;
-	$scope.adddate = false;			
+	$scope.adddate = false;
+
 
 	
 	var fetchPolls = function() {
@@ -19,6 +20,7 @@ app.controller("homeCtrl", function ($scope, $window, $http, $location){
 	};
 	
 	$scope.fetchPoll = function(id) {
+		$scope.ok = false;
 		var data = {
 				'id' : id
 			};
@@ -103,14 +105,22 @@ app.controller("homeCtrl", function ($scope, $window, $http, $location){
 	$scope.edit = function() {
 		
 		if ($scope.id > 0){
-			
+			if ($scope.adddate == true){
 			var data = {
 				'id' : $scope.id,
 				'name' : $scope.name,
 				'startdate' : Math.floor($scope.startdate.getTime() / 1000),
 				'enddate' : Math.floor($scope.enddate.getTime() / 1000)
 			};
-			
+			}
+			else{
+				var data = {
+				'id' : $scope.id,
+				'name' : $scope.name,
+				'startdate' : null,
+				'enddate' : null
+			};
+			}
 			$http.post("php/updatePoll.php", data).then(function(response){
 				if (response.data.code == 0) {
 					alert("Kysely on päivitetty");
@@ -141,6 +151,9 @@ app.controller("homeCtrl", function ($scope, $window, $http, $location){
 		else if($scope.adddate == false && $scope.name != ""){
 		  $scope.ok = true;
 		  
+	  }
+	  else {
+		  $scope.ok = false;
 	  }
 	};	
 });
