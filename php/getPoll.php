@@ -15,7 +15,7 @@
 			
 			$domain = $_SESSION["user"]["domain"];
 			
-			$query = $conn->prepare("SELECT poll.name as name, UNIX_TIMESTAMP(poll.startdate), UNIX_TIMESTAMP(poll.enddate), poll_status.name as status
+			$query = $conn->prepare("SELECT poll.name as name, UNIX_TIMESTAMP(poll.startdate) as start, UNIX_TIMESTAMP(poll.enddate) as end, poll_status.name as status
 					FROM poll
 					INNER JOIN poll_status ON poll.status = poll_status.id
 					WHERE poll.domain = ? AND poll.id = ?");
@@ -32,8 +32,8 @@
 				$row = $result->fetch_assoc();
 				
 				$name = $row["name"];
-				$start = $row["poll.startdate"];
-				$end = $row["poll.enddate"];
+				$start = $row["start"];
+				$end = $row["end"];
 				$status = $row["status"];
 				
 				$poll = array (
