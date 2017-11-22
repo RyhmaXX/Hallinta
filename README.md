@@ -1,1 +1,3 @@
 # Hallinta
+
+KOODIA EI SAA KÄYTTÄÄ ILMAN LUPAA :D
