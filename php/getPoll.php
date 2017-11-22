@@ -32,8 +32,8 @@
 				$row = $result->fetch_assoc();
 				
 				$name = $row["name"];
-				$start = $row["start"];
-				$end = $row["end"];
+				$start = strtotime($row["start"]);
+				$end = strtotime($row["end"]);
 				$status = $row["status"];
 				
 				$poll = array (
