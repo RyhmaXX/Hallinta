@@ -18,7 +18,7 @@
 			$query = $conn->prepare("SELECT poll.name as name, poll.startdate as start, poll.enddate as end, poll_status.name as status
 					FROM poll
 					INNER JOIN poll_status ON poll.status = poll_status.id
-					WHERE domain = ? AND id = ?");
+					WHERE poll.domain = ? AND poll.id = ?");
 					
 			$query->bind_param("ii", $domain, $id);
 			$query->execute();
