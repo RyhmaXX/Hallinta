@@ -20,7 +20,7 @@
 			$domain = $_SESSION["user"]["domain"];
 			
 			$query = $conn->prepare("UPDATE poll
-									SET name = ?, startdate = ?, enddate = ?
+									SET name = ?, startdate = FROM_UNIXTIME(?), enddate = FROM_UNIXTIME(?)
 									WHERE id = ? AND domain = ? AND status = 1");
 									
 			$query->bind_param("siiii", $name, $start, $end, $id, $domain);
