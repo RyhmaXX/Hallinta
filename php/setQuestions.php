@@ -2,6 +2,36 @@
 	
 	session_start();
 	
+	function deletePreviousIfExists($conn, $poll) {
+		
+		$query = $conn->prepare("SELECT COUNT(poll_id) as count
+								FROM question
+								WHERE poll_id = ?");
+		
+		$query->bind_param("i", $poll);
+		
+		if ($query->execute()) {
+			$result = $query->get_result();
+			
+			$row = $result->fetch_assoc();
+			
+			if ($row["count"] != 0) {
+				$query = $conn->prepare("DELETE FROM question
+										WHERE poll_id = ?");
+										
+				$query->bind_param("i", $poll);
+				
+				if ($query->execute()) {
+					return true;
+				}
+			} else {
+				return true;
+			}
+		}
+		
+		return false;
+	}
+	
 	function setChoices($conn, $poll, $choices, $qnum) {
 
 		$errors = 0;
@@ -92,7 +122,6 @@
 		include("db.inc");
 		
 		$errors = 0;
-		
 		$resp = [];
 		
 		if (isset($_SESSION["user"]["domain"])) {
@@ -101,44 +130,48 @@
 			$request = json_decode($postdata);
 			
 			$poll = $request->poll;
-			$questions = $request->questions;
 			
-			$query = $conn->prepare("INSERT INTO question (question_num, poll_id, question, question_types_id)
-									VALUES (?, ?, ?, ?)");
+			if (deletePreviousIfExists($conn, $poll)) {
 			
-			foreach ($questions as $question) {
-				$query->bind_param("iisi", $question[0], $poll, $question[1], $question[2]);
-				if ($query->execute()) {
-					// Success
-					
-					if ($question[2] > 99 && $question[2] < 200) {
-						
-						$errors += setChoices($conn, $poll, $question[3], $question[0]);
-						
-						$query = $conn->prepare("INSERT INTO question (question_num, poll_id, question, question_types_id)
-									VALUES (?, ?, ?, ?)");
-					} else if ($question[2] > 199) {
-						
-						$errors += setMatrix($conn, $poll, $question[3], $question[0]);
-						
-						$query = $conn->prepare("INSERT INTO question (question_num, poll_id, question, question_types_id)
-									VALUES (?, ?, ?, ?)");
-					}
-					
-					
+				$questions = $request->questions;
+				
+				$query = $conn->prepare("INSERT INTO question (question_num, poll_id, question, question_types_id)
+										VALUES (?, ?, ?, ?)");
 
-				} else {
-					// Error
-					$errors++;
+				foreach ($questions as $question) {
+					$query->bind_param("iisi", $question[0], $poll, $question[1], $question[2]);
+					if ($query->execute()) {
+						// Success
+						
+						if ($question[2] > 99 && $question[2] < 200) {
+							
+							$errors += setChoices($conn, $poll, $question[3], $question[0]);
+							
+							$query = $conn->prepare("INSERT INTO question (question_num, poll_id, question, question_types_id)
+										VALUES (?, ?, ?, ?)");
+						} else if ($question[2] > 199) {
+							
+							$errors += setMatrix($conn, $poll, $question[3], $question[0]);
+							
+							$query = $conn->prepare("INSERT INTO question (question_num, poll_id, question, question_types_id)
+										VALUES (?, ?, ?, ?)");
+						}
+
+					} else {
+						// Error
+						$errors++;
+					}
 				}
 				
+				$resp["code"] = 0;
+				$resp["errors"] = $errors;
+				
+			} else {
+				// Check failed
+				$resp["code"] = -2;
 			}
-			
-			$resp["code"] = 0;
-			$resp["errors"] = $errors;
-			
 		} else {
-			// Not logget in
+			// Not logged in
 			$resp["code"] = 1;
 		}
 	} catch (Exception $e){
