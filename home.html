@@ -31,7 +31,7 @@
 					<td>{{x.end != null ? x.end : "-"}}</td>
 					<td>{{x.status}}</td>
 					<td>
-						<button type="button" title="Muokkaa" class="btn btn-info btn-sm" ng-click="fetchPoll(x.id)" data-toggle="modal" data-target="#editModal" ng-hide="x.status != 'Luotu'"><i class="glyphicon glyphicon-wrench"></i></button>
+						<button type="button" title="Muokkaa" class="btn btn-info btn-sm" ng-click="fetchPoll(x.id); fetchTemplate(x.id)" data-toggle="modal" data-target="#editModal" ng-hide="x.status != 'Luotu'"><i class="glyphicon glyphicon-wrench"></i></button>
 						<button type="button" title="Julkaise" class="btn btn-info btn-sm" ng-click="saveId(x.id)" data-toggle="modal" data-target="#publishModal" ng-hide="x.status != 'Luotu'"><i class="glyphicon glyphicon-export"></i></button>
 						<button type="button" title="Poista" class="btn btn-danger btn-sm" ng-click="saveId(x.id)"data-toggle="modal" data-target="#deleteModal"><i class="glyphicon glyphicon-remove-circle"></i></button>
 					</td>
@@ -91,6 +91,29 @@
 					<label>Loppumispvm:</label>
 					<input type="date" class="form-control" ng-model="enddate" ng-change="check()">
 				</div>
+				<label>Kysymykset:
+				<br><br>
+				<div class="panel-group" id="accordion" ng-repeat="x in questions">
+		
+					<div class="panel panel-default">
+						<div class="panel-heading" data-toggle="collapse" data-parent="#accordion" href='{{"#" + x.num}}'>
+							<p>{{x.num + ". " + x.question}}</p>
+						</div>
+						
+						<div id='{{x.num}}' class="panel-collapse collapse">
+							<div class="panel-body">
+								<p>Kysymystyyppi: {{x.type}}</p>
+								<input type="text" class="form-control" ng-model="x.question"><br>
+								<button type="button" title="Poista" class="btn btn-danger btn-sm" ng-click="{{deleteQuestion(x.num)}}"><i class="glyphicon glyphicon-remove-circle"></i></button><br>
+								<p>extra: <br> {{x.extra}}</p>
+								
+								
+							</div>
+						</div>
+					</div>								
+					
+				</div>				
+				</label><br/>
 			</div>
 			<div class="modal-footer">
 				<button class="btn btn-sm {{ok ? 'btn-success' : 'btn-disabled'}}" ng-disabled="!ok" ng-click="edit()">Päivitä</button>
