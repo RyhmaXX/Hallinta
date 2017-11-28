@@ -159,7 +159,26 @@ app.controller("homeCtrl", function ($scope, $window, $http, $location){
 				$('#editModal').modal('hide');
 			});
 			
-			// Tähän kysymyksien päivitys //
+				//----- Kysymysten päivittäminen -----//
+			var questions = [];
+							
+			var len = $scope.questions.length;
+							
+			for (var i = 0;  i < len; i++) {
+				questions.push([$scope.questions[i].num, $scope.questions[i].question, $scope.questions[i].type, $scope.questions[i].extra]);
+			}
+							
+			var data = {
+				'poll' : $scope.id,
+				'questions' : questions
+				}
+							
+			$http.post("php/setQuestions.php", data).then(function(response) {
+				if (response.data.code != 0) {
+					alert("Virhe kysymysten lähettämisessä!");
+					}
+			});
+			
 			
 		}
 		else{
