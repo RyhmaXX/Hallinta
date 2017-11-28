@@ -47,6 +47,23 @@ app.controller("homeCtrl", function ($scope, $window, $http, $location){
 		});
 	};	
 	
+	$scope.fetchTemplate = function(id) {
+		$scope.ok = false;
+		var data = {
+				'pollid' : id
+			};
+		$http.post("php/getTemplate.php", data).then(function(response){
+			if (response.data.code == 0) {			
+				$scope.questions = response.data.questions;	
+				//alert($scope.questions[0].num);
+			} else if (response.data.code == 1) {
+				$location.path("/home");
+			} else {
+				alert("error");
+			}
+		});
+	};	
+	
 	fetchPolls();
 	
 	$scope.saveId = function(id) {
@@ -78,6 +95,16 @@ app.controller("homeCtrl", function ($scope, $window, $http, $location){
 		
 		
 	}
+	
+	$scope.deleteQuestion = function(id) {
+		
+			// Kysymyksen poistaminen
+			//$scope.questions[id].num = null;
+
+		}
+		
+		
+	
 	
 	$scope.delete = function() {
 		
@@ -131,6 +158,9 @@ app.controller("homeCtrl", function ($scope, $window, $http, $location){
 				fetchPolls();
 				$('#editModal').modal('hide');
 			});
+			
+			// Tähän kysymyksien päivitys //
+			
 		}
 		else{
 			alert("Kyselyä ei valittuna");
