@@ -1,0 +1,20 @@
+@media (min-width: 768px) {
+  .modal-xl {
+    width: 90%;
+   max-width:1600px;
+  }
+}
+
+.zeroHeight {
+	max-height: 0 !important;
+	min-height: 0 !important;
+	height: 0 !important;
+	margin-top: 0 !important;
+	margin-bottom: 0 !important;
+	padding-top: 0 !important;
+	padding-bottom: 0 !important;
+	border: 0 !important;
+	outline: 0 !important;
+	font-size:0;
+	margin:0;
+}
