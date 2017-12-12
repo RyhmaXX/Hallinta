@@ -96,6 +96,27 @@ app.controller("homeCtrl", function ($scope, $window, $http, $location){
 		}
 	}
 	
+	$scope.endPoll = function() {
+		
+		if ($scope.id > 0){
+			
+			var data = {
+				'poll' : $scope.id
+			};
+			
+			$http.post("php/endPoll.php", data).then(function(response){
+				if (response.data.code == 0) {
+					alert("Kysely on päätetty");
+				}
+				else {
+					alert("error" + response.data.code);
+				}
+				fetchPolls();
+				$('#endModal').modal('hide');
+			});
+		}
+	}		
+	
 	$scope.deletePoll = function() {
 		
 		if ($scope.id > 0){
