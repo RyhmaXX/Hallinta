@@ -45,14 +45,36 @@ app.controller("homeCtrl", function ($scope, $window, $http, $location){
 		});
 	};	
 	
+	$scope.endPoll = function(id) {
+		
+		var data = {
+			'id' : id
+		};
+		
+		$http.post("php/endPoll.php", data).then(function(response){
+			if (response.data.code == 0) {
+				alert("Kysely on päätetty!");
+			} else if (response.data.code == 1) {
+				$location.path("/home");
+			} else {
+				alert("error");
+			}
+		});
+		
+		fetchPolls();
+	}
+	
 	$scope.fetchTemplate = function(id) {
+		
 		$scope.ok = false;
+		
 		var data = {
 			'pollid' : id
 		};
+		
 		$http.post("php/getTemplate.php", data).then(function(response){
 			if (response.data.code == 0) {
-				$scope.id = id;
+				
 				$scope.questions = response.data.questions;	
 				
 				$scope.questionsStatus = [];
@@ -60,6 +82,8 @@ app.controller("homeCtrl", function ($scope, $window, $http, $location){
 				for (var i = 0; i < $scope.questions.length; i++) {
 					$scope.questionsStatus.push("true");
 				}
+				
+				$scope.id = id;
 				
 			} else if (response.data.code == 1) {
 				$location.path("/home");
@@ -95,27 +119,6 @@ app.controller("homeCtrl", function ($scope, $window, $http, $location){
 			});
 		}
 	}
-	
-	$scope.endPoll = function() {
-		
-		if ($scope.id > 0){
-			
-			var data = {
-				'poll' : $scope.id
-			};
-			
-			$http.post("php/endPoll.php", data).then(function(response){
-				if (response.data.code == 0) {
-					alert("Kysely on päätetty");
-				}
-				else {
-					alert("error" + response.data.code);
-				}
-				fetchPolls();
-				$('#endModal').modal('hide');
-			});
-		}
-	}		
 	
 	$scope.deletePoll = function() {
 		
