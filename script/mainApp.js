@@ -12,6 +12,7 @@ app.config(function($routeProvider) {
     })
     .when("/results", {
         templateUrl : "results.html"
+		controller : "resultsCtrl"
     })
 	.when("/home", {
         templateUrl : "home.html",
