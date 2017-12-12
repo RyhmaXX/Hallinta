@@ -18,7 +18,7 @@
 			$domain = $_SESSION["user"]["domain"];
 			
 			$query = $conn->prepare("UPDATE poll
-									SET status = 3
+									SET status = 3, enddate = now()
 									WHERE id = ? AND domain = ? AND status = 2");
 			
 			$query->bind_param("iii", $poll, $domain);
