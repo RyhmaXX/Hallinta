@@ -53,8 +53,8 @@
 						<button type="button" title="Muokkaa perusasetuksia" class="btn btn-primary btn-sm" ng-click="fetchPoll(x.id)" data-toggle="modal" data-target="#editModal" ng-hide="x.status != 'Luotu'"><i class="glyphicon glyphicon-cog"></i></button>
 						<button type="button" title="Muokkaa kysymyksiä" class="btn btn-primary btn-sm" ng-click="fetchTemplate(x.id)" data-toggle="modal" data-target="#editQuestionsModal" ng-hide="x.status != 'Luotu'"><i class="glyphicon glyphicon-list"></i></button>
 						<button type="button" title="Julkaise" class="btn btn-success btn-sm" ng-click="saveId(x.id)" data-toggle="modal" data-target="#publishModal" ng-hide="x.status != 'Luotu'"><i class="glyphicon glyphicon-share-alt"></i></button>
+						<button type="button" title="Päätä kysely" class="btn btn-warning btn-sm" ng-click="endPoll(x.id)" ng-hide="x.status != 'Kaynnissa'"><i class="glyphicon glyphicon-stop"></i></button>
 						<button type="button" title="Poista" class="btn btn-danger btn-sm" ng-click="saveId(x.id)"data-toggle="modal" data-target="#deleteModal"><i class="glyphicon glyphicon-trash"></i></button>
-						<button type="button" title="Pysäytä" class="btn btn-danger btn-sm" ng-click="saveId(x.id)"data-toggle="modal" data-target="#endModal"><i class="glyphicon glyphicon-pause"></i></button>
 					</td>
 				</tr>
 		</tbody>
@@ -84,29 +84,6 @@
       </div>
     </div>
   </div>
-	
-	<!-- End Poll Modal-->
-	<div class="modal fade" id="endModal" role="dialog">
-    <div class="modal-dialog">
-    
-      <!-- Modal content-->
-      <div class="modal-content">
-        <div class="modal-header">
-          <button type="button" class="close" data-dismiss="modal">&times;</button>
-          <h4 class="modal-title">Kyselyn päättäminen</h4>
-        </div>
-        <div class="modal-body">
-          <p>Päätetäänkö kysely?</p>
-        </div>
-        <div class="modal-footer">
-		<center>
-			<button type="button" class="btn btn-default" ng-click="endPoll()">Pysäytä</button>
-			<button type="button" class="btn btn-default" data-dismiss="modal">Peruuta</button>
-		</center>
-        </div>
-      </div>
-    </div>
-  </div>	
   
 	<!-- Edit Poll Modal-->
 	<div class="modal fade" id="editModal" role="dialog">
