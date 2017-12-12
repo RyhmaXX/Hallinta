@@ -11,7 +11,7 @@ app.config(function($routeProvider) {
 		controller : "newQueryCtrl"
     })
     .when("/results", {
-        templateUrl : "results.html"
+        templateUrl : "results.html",
 		controller : "resultsCtrl"
     })
 	.when("/home", {

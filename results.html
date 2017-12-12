@@ -29,6 +29,269 @@
 
 <div class="container" style="margin-top:50px">
 	<div class="well">
-		<p>Tulokset -sivu</p>
+		<h4>Kyselyt:</h4>
+		<div class="table-responsive">
+			<table class="table">
+			
+			<thead>
+					<tr>
+						<th>Nimi:</th>
+						<th>Alkaa:</th>
+						<th>Päättyy:</th>
+						<th>Tila:</th>
+						<th>Toiminnot:</th>
+					</tr>
+			</thead>
+			<tbody>
+			<tr ng-repeat="x in polls" ng-hide="x.status == 'Luotu'">		
+						<td>{{x.name}}</td>
+						<td>{{x.start != null ? x.start : "-"}}</td>
+						<td>{{x.end != null ? x.end : "-"}}</td>
+						<td>{{x.status}}</td>
+						<td align="right">
+							<button type="button" title="Tulokset" class="btn btn-primary btn-sm" ng-click="getAnswersAndQuestions(x.id)" data-toggle="modal" data-target="#answerModal"><i class="glyphicon glyphicon-search"></i></button>
+						</td>
+					</tr>
+			</tbody>
+			</table>
+		</div>
 	</div>
 </div>
+
+<!-- Edit Questions Modal -->
+<div class="modal fade" id="answerModal" role="dialog">
+	<div class="modal-dialog modal-xl">
+
+		<!-- Modal content-->
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal">&times;</button>
+				<h4 class="modal-title">{{pollName}}</h4>
+			</div>
+		
+			<div class="modal-body">
+				<div class="panel-group" id="accordion">
+		
+					<div class="panel panel-primary" ng-repeat="x in questions">
+						<div class="panel-heading" data-toggle="collapse" href='{{"#" + x.num}}' data-parent="#accordion" ng-click="getResultArray(x.num, x.type)">
+							
+							<table style="width:100%;">
+								<tr>
+									<td>
+										{{x.num + ". " + x.question}}
+									</td>
+									<td align="right">
+										{{getValidAnswers(x.num)}} / {{userCount}}
+									</td>
+								</tr>
+							</table>
+							
+						</div>
+						
+						<div id='{{x.num}}' class="panel-collapse collapse">
+							<div class="panel-body">
+
+								<h4>Kysymyksen tyyppi: {{getType(x.type)}}</h4>
+								
+								<!-- Text Question -->
+								<div ng-hide="x.type != 1">
+									
+									<table class="table">
+										<thead>
+											<th>Vastaukset:</th>
+										</thead>
+										
+										<tbody>
+											<tr ng-repeat="z in answers[x.num] track by $index">
+												<td>{{z}}</td>
+											</tr>
+										</tbody>
+									</table>
+								
+								</div>
+								
+								<!-- Numeric Question -->
+								<div ng-hide="x.type != 2">
+									
+									<table class="table">
+										<thead>
+											<th>Summa:</th>
+											<th>Keskiarvo:</th>
+											<th>Minimi:</th>
+											<th>Maksimi:</th>
+										</thead>
+										
+										<tbody>
+											<tr>
+												<td>{{resultArray[0]}}</td>
+												<td>{{resultArray[1]}}</td>
+												<td>{{resultArray[2]}}</td>
+												<td>{{resultArray[3]}}</td>
+											</tr>
+										</tbody>
+									</table>
+								
+								</div>
+								
+								<!-- Boolean Question -->
+								<div ng-hide="x.type != 3">
+									
+									<table class="table">
+										<thead>
+											<th>Kyllä kpl:</th>
+											<th>Kyllä %:</th>
+											<th>Ei kpl:</th>
+											<th>Ei %:</th>
+										</thead>
+										
+										<tbody>
+											<tr>
+												<td>{{resultArray[0][0]}}</td>
+												<td>{{resultArray[0][1]}}</td>
+												<td>{{resultArray[1][0]}}</td>
+												<td>{{resultArray[1][1]}}</td>
+											</tr>
+										</tbody>
+									</table>
+								
+								</div>
+								
+								<!-- Choice Question -->
+								<div ng-hide="x.type != 100">
+									
+									<div class="table-responsive">
+										<table class="table">
+											<thead>
+												<tr>
+													<th>Vaihtoehto:</th>
+													<th>Valittu kpl:</th>
+													<th>Valittu %:</th>
+												</tr>
+											</thead>
+											
+											<tbody>
+												<tr ng-repeat="y in x.extra">
+													<th>{{y.name}}</th>
+													<td>{{resultArray[y.num - 1][0]}}</td>
+													<td>{{resultArray[y.num - 1][1]}}</td>
+												</tr>
+											</tbody>
+										</table>
+									</div>
+								</div>
+								
+								<!-- Multiple-Choice Question -->
+								<div ng-hide="x.type != 101">
+									
+									<div class="table-responsive">
+										<table class="table">
+											<thead>
+												<tr>
+													<th>Vaihtoehto:</th>
+													<th>Valittu kpl:</th>
+													<th>Valittu %:</th>
+												</tr>
+											</thead>
+											
+											<tbody>
+												<tr ng-repeat="y in x.extra">
+													<th>{{y.name}}</th>
+													<td>{{resultArray[y.num - 1][0]}}</td>
+													<td>{{resultArray[y.num - 1][1]}}</td>
+												</tr>
+											</tbody>
+										</table>
+									</div>
+								</div>
+								
+								<!-- Matrix Question -->
+								<div ng-hide="x.type < 200">
+									
+									<br>
+									<h4>{{x.extra.header}}</h4>
+									<br>
+									<div class="table-responsive">
+										<table class="table table-bordered">
+											<thead>
+												<tr>
+													<td></td>
+													<th ng-repeat="col in x.extra.columns">{{col.title}}</th>
+												</tr>
+											</thead>
+											
+											<tbody>
+												<tr ng-repeat="row in x.extra.rows">
+													<th>{{row.title}}</th>
+
+													<th ng-repeat="col in resultArray track by $index">
+														<table class="table" ng-hide="col[0].type != 1 && col[0].type != 2 ">
+															<thead>
+																<th>Summa:</th>
+																<th>Keskiarvo:</th>
+																<th>Minimi:</th>
+																<th>Maksimi:</th>
+															</thead>
+															
+															<tbody>
+																<tr>
+																	<td>{{col[row.num + 1][0]}}</td>
+																	<td>{{col[row.num + 1][1]}}</td>
+																	<td>{{col[row.num + 1][2]}}</td>
+																	<td>{{col[row.num + 1][3]}}</td>
+																</tr>
+															</tbody>
+														</table>
+														
+														<table class="table" ng-hide="col[0].type != 3">
+															<thead>
+																<th>Vastaukset:</th>
+															</thead>
+															
+															<tbody>
+																<tr ng-repeat="x in col[row.num + 1] track by $index">
+																	<td>{{x}}</td>
+																</tr>
+															</tbody>
+														</table>
+														
+														<table class="table" ng-hide="col[0].type != 4">
+															<thead>
+																<th>Kyllä kpl:</th>
+																<th>Kyllä %:</th>
+																<th>Ei kpl:</th>
+																<th>Ei %:</th>
+															</thead>
+															
+															<tbody>
+																<tr>
+																	<td>{{col[(2*row.num) + 1][0]}}</td>
+																	<td>{{col[(2*row.num) + 1][1]}}</td>
+																	<td>{{col[(2*row.num) + 2][0]}}</td>
+																	<td>{{col[(2*row.num) + 2][1]}}</td>
+																</tr>
+															</tbody>
+														</table>
+													</th>
+												</tr>
+											</tbody>
+										</table>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>								
+				</div>	
+			</div>
+			
+			<div class="modal-footer">
+				<button type="button" class="btn btn-default" data-dismiss="modal">Sulje</button>
+			</div>
+		</div>
+	</div>
+</div>
+
+<p>{{answers}}</p>
+<br>
+<p>{{questions}}</p>
+<br>
+<p>{{resultArray}}</p>
