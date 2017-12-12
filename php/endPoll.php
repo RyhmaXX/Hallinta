@@ -11,7 +11,7 @@
 		$postdata = file_get_contents("php://input");
 		$request = json_decode($postdata);
 		
-		$poll = $request->poll;
+		$poll = $request->id;
 		
 		if (isset($_SESSION["user"])) {
 			
@@ -21,7 +21,7 @@
 									SET status = 3, enddate = now()
 									WHERE id = ? AND domain = ? AND status = 2");
 			
-			$query->bind_param("iii", $poll, $domain);
+			$query->bind_param("ii", $poll, $domain);
 			
 			if ($query->execute()) {
 				
