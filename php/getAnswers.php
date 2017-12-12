@@ -9,7 +9,7 @@
 		$postdata = file_get_contents("php://input");
 		$request = json_decode($postdata);
 		
-		$poll = $request->poll;
+		$poll = $request->pollid;
 		
 		$resp = [];
 		
